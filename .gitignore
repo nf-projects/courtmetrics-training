@@ -1,3 +1,5 @@
 training/tennis-ball-detection-6/
 *.pt
 runs/
+training/data/
+*.zip
