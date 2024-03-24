@@ -22,6 +22,8 @@ def main():
                                                 stub_path="tracker_stubs/ball_detections.pkl"
                                                 )
     
+    # interpolate missing ball frames
+    ball_detections = ball_tracker.interpolate_ball_positions(ball_detections)    
     # Court keypoint detector model
     court_model_path = "models/keypoints_model.pth"
     court_line_detector = CourtLineDetector(court_model_path)

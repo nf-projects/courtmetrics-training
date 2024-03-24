@@ -1,11 +1,29 @@
 from ultralytics import YOLO
 import cv2
 import pickle
+import pandas as pd
 
 class BallTracker:
     def __init__(self, model_path):
         self.model = YOLO(model_path)
 
+    def interpolate_ball_positions(self, ball_positions):
+        """ The neural net that detects the ball may not be able to detect the ball in every frame
+        So we need to interpolate the ball positions between frames if the ball is not detected in that frame
+        """
+        ball_positions = [x.get(1, []) for x in ball_positions]
+
+        # Convert the list into a pandas dataframe
+        df_ball_positions = pd.DataFrame(ball_positions, columns=['x1', 'y1', 'x2', 'y2'])
+
+        # interpolate missing values
+        df_ball_positions = df_ball_positions.interpolate()
+        df_ball_positions = df_ball_positions.bfill()
+
+        ball_positions = [{1:x} for x in df_ball_positions.to_numpy().tolist()] 
+
+        return ball_positions
+    
     def detect_frames(self, frames, read_from_stub=False, stub_path=None):
         ball_detections = []
 
