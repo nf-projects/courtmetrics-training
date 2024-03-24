@@ -1,5 +1,8 @@
 training/tennis-ball-detection-6/
 *.pt
+*.pth
 runs/
 training/data/
 *.zip
+output_videos/
+tracker_stubs/
